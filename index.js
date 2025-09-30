@@ -3,13 +3,18 @@ import mongoose from 'mongoose';
 import cors from 'cors'; // it is controlling the calls
 import dotenv from 'dotenv';
 import bookRoutes from './Routes/bookRoutes.js';
+import errorHandler from './middleware/errorHandler.js';
+
+
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use('/books', bookRoutes); 
+app.use('/books', bookRoutes);
+app.use(errorHandler); 
 app.get('/', (req, res) => res.send('This is my backend of bookstore'));
 
 mongoose.connect(process.env.MONGODB_URI)

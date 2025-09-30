@@ -19,14 +19,21 @@ export const getBookById = async (req, res) => {
 };
 
 export const addBook = async (req, res) => {
+  const { title, author, publishedYear } = req.body;
+  
+  if (!title || !author || !publishedYear) {
+    return res.status(400).json({ message: 'All fields are required: title, author, publishedYear' });
+  }
+
   try {
     const book = new Book(req.body);
     const savedBook = await book.save();
     res.status(201).json(savedBook);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+
 
 export const updateBook = async (req, res) => {
   try {
