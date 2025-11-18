@@ -1,19 +1,19 @@
 import express from "express";
-import Book from "../Models/BookModel.js";
-import { getBooks,
-  getBookById,
+import {
+  getAllBooks,
+  getBookByID,
   addBook,
-  updateBook,
+  updateBookByID,
   deleteBook
-} from "../controller/bookController.js";
+} from "../controllers/bookController.js";
+import { authenticateJWT, authorizeRoles } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get('/allBooks', getBooks);
-router.get('/:id', getBookById);
-router.post('/add', addBook);
-router.put('/edit/:id', updateBook);
-router.delete('/:id', deleteBook);
+router.post('/add', authenticateJWT, authorizeRoles("admin"), addBook);
+router.get('/allBooks', authenticateJWT, getAllBooks);
+router.get('/:id', authenticateJWT, getBookByID);
+router.put('/edit/:id', authenticateJWT, authorizeRoles("admin"), updateBookByID);
+router.delete('/:id', authenticateJWT, authorizeRoles("admin"), deleteBook);
 
 export default router;
-
